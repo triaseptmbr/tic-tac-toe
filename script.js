@@ -42,6 +42,8 @@ const player = (name, token) => {
     const dataTokenColumns = [];
     let statusRows;
     let statusColumns;
+    let statusRowsDiagonal;
+    let statusColumnsDiagonal;
 
     dataToken.forEach((element) => {
       dataTokenRows.push(element.substring(0, 1));
@@ -67,7 +69,31 @@ const player = (name, token) => {
       statusColumns = 1;
     }
 
-    let status = statusRows || statusColumns
+    for (let i = 1; i < dataTokenRows.length; ++i) {
+      if (dataTokenRows[i - 1] === dataTokenRows[i]) {
+        statusRowsDiagonal = 0;
+        break;
+      }
+      statusRowsDiagonal = 1;
+    }
+
+    for (let i = 1; i < dataTokenColumns.length; ++i) {
+      if (dataTokenColumns[i - 1] === dataTokenColumns[i]) {
+        statusColumnsDiagonal = 0;
+        break;
+      }
+      statusColumnsDiagonal = 1;
+    }
+
+    let status = statusRows || statusColumns;
+
+    if (
+      status === 0 &&
+      statusRowsDiagonal === 1 &&
+      statusColumnsDiagonal === 1
+    ) {
+      status = 1;
+    }
 
     return status;
   };
@@ -75,13 +101,14 @@ const player = (name, token) => {
   return { name, token, fillColumn, check };
 };
 
-const playRound = (function () {
+const playRound = (() => {
   const playerOne = player("asep", "x");
 
-  playerOne.fillColumn(7, playerOne.token);
-  playerOne.fillColumn(8, playerOne.token);
+  playerOne.fillColumn(3, playerOne.token);
   playerOne.fillColumn(5, playerOne.token);
+  playerOne.fillColumn(7, playerOne.token);
 
   console.log(gameBoard.displayBoard());
+
   console.log(playerOne.check());
 })();
