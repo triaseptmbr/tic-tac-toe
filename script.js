@@ -103,12 +103,15 @@ const player = (name, token) => {
 
 const displayBoard = () => {
   const grid = document.querySelector("#gameboard");
-  grid.style.setProperty("--rows", gameBoard.rows);
-  grid.style.setProperty("--columns", gameBoard.columns);
 
   if (grid.hasChildNodes()) {
-    console.log(grid.firstChild);
+    while (grid.firstChild) {
+      grid.removeChild(grid.firstChild);
+    }
   }
+
+  grid.style.setProperty("--rows", gameBoard.rows);
+  grid.style.setProperty("--columns", gameBoard.columns);
 
   let index = 1;
   gameBoard.displayBoard().forEach((element) => {
@@ -129,6 +132,19 @@ const displayBoard = () => {
       index++;
     });
   });
+  let clickColumn = document.querySelectorAll("#gameboard > div");
+
+  const playerOne = player("asep", "x");
+
+  clickColumn = document.querySelectorAll("#gameboard > div");
+  clickColumn.forEach((element) => {
+    element.addEventListener("click", function (e) {
+      let coordinat = Number(e.target.dataset.coordinat);
+      playerOne.fillColumn(coordinat, playerOne.token);
+      console.log(gameBoard.displayBoard());
+      displayBoard();
+    });
+  });
 };
 
 const playRound = (() => {
@@ -138,11 +154,10 @@ const playRound = (() => {
   const clickColumn = document.querySelectorAll("#gameboard > div");
   clickColumn.forEach((element) => {
     element.addEventListener("click", function (e) {
-      e.stopPropagation;
-
       let coordinat = Number(e.target.dataset.coordinat);
       playerOne.fillColumn(coordinat, playerOne.token);
       console.log(gameBoard.displayBoard());
+      displayBoard();
     });
   });
 })();
