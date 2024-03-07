@@ -1,3 +1,5 @@
+// I decide this program for debugging exercise.
+
 const gameBoard = (() => {
   const rows = 3;
   const columns = 3;
@@ -44,6 +46,10 @@ const player = (name, token) => {
     let statusColumns;
     let statusRowsDiagonal;
     let statusColumnsDiagonal;
+
+    if (dataToken.length < gameBoard.rows) {
+      return 0;
+    }
 
     dataToken.forEach((element) => {
       dataTokenRows.push(element.substring(0, 1));
@@ -101,7 +107,7 @@ const player = (name, token) => {
   return { name, token, fillColumn, check };
 };
 
-const displayBoard = () => {
+const displayUI = (playerOne, playerTwo) => {
   const grid = document.querySelector("#gameboard");
 
   if (grid.hasChildNodes()) {
@@ -132,32 +138,26 @@ const displayBoard = () => {
       index++;
     });
   });
+
+  const player = playerTwo;
+  console.log(gameBoard.displayBoard());
+
   let clickColumn = document.querySelectorAll("#gameboard > div");
-
-  const playerOne = player("asep", "x");
-
-  clickColumn = document.querySelectorAll("#gameboard > div");
   clickColumn.forEach((element) => {
     element.addEventListener("click", function (e) {
       let coordinat = Number(e.target.dataset.coordinat);
-      playerOne.fillColumn(coordinat, playerOne.token);
-      console.log(gameBoard.displayBoard());
-      displayBoard();
+
+      player.fillColumn(coordinat, player.token);
+
+      const nextPlayer = playerOne;
+      displayUI(player, nextPlayer);
     });
   });
 };
 
 const playRound = (() => {
   const playerOne = player("asep", "x");
-  displayBoard();
+  const playerTwo = player("evah", "o");
 
-  const clickColumn = document.querySelectorAll("#gameboard > div");
-  clickColumn.forEach((element) => {
-    element.addEventListener("click", function (e) {
-      let coordinat = Number(e.target.dataset.coordinat);
-      playerOne.fillColumn(coordinat, playerOne.token);
-      console.log(gameBoard.displayBoard());
-      displayBoard();
-    });
-  });
+  displayUI(playerOne, playerTwo);
 })();
